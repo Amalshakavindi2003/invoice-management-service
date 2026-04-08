@@ -32,7 +32,7 @@ public class Invoice {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "invoice_id")
     private List<InvoiceLineItem> lineItems = new ArrayList<>();
 
