@@ -1,5 +1,6 @@
 package com.invoiceprocessing.server.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,6 +13,9 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column(unique = true)
+    private String referenceCode;
+
     private String name;
     private String email;
     private String phone;
@@ -20,8 +24,9 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(long id, String name, String email, String phone, String address) {
+    public Customer(long id, String referenceCode, String name, String email, String phone, String address) {
         this.id = id;
+        this.referenceCode = referenceCode;
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -34,6 +39,14 @@ public class Customer {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getReferenceCode() {
+        return referenceCode;
+    }
+
+    public void setReferenceCode(String referenceCode) {
+        this.referenceCode = referenceCode;
     }
 
     public String getName() {
