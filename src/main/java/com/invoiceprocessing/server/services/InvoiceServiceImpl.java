@@ -24,17 +24,38 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public Invoice addInvoice(Invoice invoice) {
+        if (invoice == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invoice payload is required");
+        }
+
         Customer customer = resolveCustomer(invoice);
+
+        if (invoice.getDate() == null || invoice.getDate().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invoice date is required");
+        }
+
         List<InvoiceLineItem> safeItems = invoice.getLineItems() == null ? new ArrayList<>() : invoice.getLineItems();
+        if (safeItems.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one line item is required");
+        }
 
         double subtotal = 0;
         double taxTotal = 0;
 
         for (InvoiceLineItem item : safeItems) {
-            int quantity = Math.max(0, item.getQuantity());
-            double unitPrice = Math.max(0, item.getUnitPrice());
+            if (item == null || item.getName() == null || item.getName().isBlank()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Each line item requires a name");
+            }
+
+            int quantity = item.getQuantity();
+            double unitPrice = item.getUnitPrice();
             double taxRate = Math.max(0, item.getTaxRate());
 
+            if (quantity <= 0 || unitPrice <= 0) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Quantity and unit price must be greater than zero");
+            }
+
+            item.setName(item.getName().trim());
             item.setQuantity(quantity);
             item.setUnitPrice(unitPrice);
             item.setTaxRate(taxRate);
@@ -61,7 +82,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
 
         if (invoice.getProduct() == null || invoice.getProduct().isBlank()) {
-            invoice.setProduct(safeItems.isEmpty() ? "" : safeItems.get(0).getName());
+            invoice.setProduct(safeItems.get(0).getName());
         }
 
         invoice.setVendor(customer.getName());
@@ -84,7 +105,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     private Customer resolveCustomer(Invoice invoice) {
-        if (invoice == null || invoice.getCustomer() == null || invoice.getCustomer().getId() <= 0) {
+        if (invoice.getCustomer() == null || invoice.getCustomer().getId() <= 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer is required for invoice");
         }
 
