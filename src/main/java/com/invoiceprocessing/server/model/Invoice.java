@@ -23,10 +23,17 @@ public class Invoice {
     private int amount;
     private String date;
     private String action;
+    private String dueDate;
+    private String reminderSentAt;
     private double subtotal;
     private double taxTotal;
     private double discount;
     private double totalAmount;
+    private double paidAmount;
+    private String paidDate;
+    private String paymentMethod;
+    private String paymentReference;
+    private String paymentNotes;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
@@ -40,18 +47,26 @@ public class Invoice {
     }
 
     public Invoice(long id, String vendor, String product, int amount, String date, String action,
-                   double subtotal, double taxTotal, double discount, double totalAmount,
-                   Customer customer, List<InvoiceLineItem> lineItems) {
+                   String dueDate, String reminderSentAt, double subtotal, double taxTotal, double discount,
+                   double totalAmount, double paidAmount, String paidDate, String paymentMethod,
+                   String paymentReference, String paymentNotes, Customer customer, List<InvoiceLineItem> lineItems) {
         this.id = id;
         this.vendor = vendor;
         this.product = product;
         this.amount = amount;
         this.date = date;
         this.action = action;
+        this.dueDate = dueDate;
+        this.reminderSentAt = reminderSentAt;
         this.subtotal = subtotal;
         this.taxTotal = taxTotal;
         this.discount = discount;
         this.totalAmount = totalAmount;
+        this.paidAmount = paidAmount;
+        this.paidDate = paidDate;
+        this.paymentMethod = paymentMethod;
+        this.paymentReference = paymentReference;
+        this.paymentNotes = paymentNotes;
         this.customer = customer;
         this.lineItems = lineItems;
     }
@@ -104,6 +119,22 @@ public class Invoice {
         this.action = action;
     }
 
+    public String getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(String dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public String getReminderSentAt() {
+        return reminderSentAt;
+    }
+
+    public void setReminderSentAt(String reminderSentAt) {
+        this.reminderSentAt = reminderSentAt;
+    }
+
     public double getSubtotal() {
         return subtotal;
     }
@@ -134,6 +165,46 @@ public class Invoice {
 
     public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public double getPaidAmount() {
+        return paidAmount;
+    }
+
+    public void setPaidAmount(double paidAmount) {
+        this.paidAmount = paidAmount;
+    }
+
+    public String getPaidDate() {
+        return paidDate;
+    }
+
+    public void setPaidDate(String paidDate) {
+        this.paidDate = paidDate;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public String getPaymentReference() {
+        return paymentReference;
+    }
+
+    public void setPaymentReference(String paymentReference) {
+        this.paymentReference = paymentReference;
+    }
+
+    public String getPaymentNotes() {
+        return paymentNotes;
+    }
+
+    public void setPaymentNotes(String paymentNotes) {
+        this.paymentNotes = paymentNotes;
     }
 
     public Customer getCustomer() {
