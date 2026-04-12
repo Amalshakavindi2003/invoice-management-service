@@ -25,6 +25,11 @@ jobs:
           java-version: '17'
           cache: maven
 
+      - name: Prepare Maven wrapper for Linux
+        run: |
+          sed -i 's/\r$//' mvnw
+          chmod +x mvnw
+
       - name: Run tests
         run: ./mvnw -B test
 
